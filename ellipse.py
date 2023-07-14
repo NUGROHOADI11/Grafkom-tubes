@@ -1,7 +1,6 @@
 # --------------------------------------------------------------------------------------------------
 # generate ellipse
 # --------------------------------------------------------------------------------------------------
-
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
 
@@ -16,6 +15,7 @@ class EllipseDrawer:
 
         self.points = []
         self.ellipse = None
+        self.lines = []  # Added list to store the lines
 
         self.fig.canvas.mpl_connect('button_press_event', self.on_press)
 
@@ -26,6 +26,7 @@ class EllipseDrawer:
 
             if len(self.points) == 2:
                 self.draw_ellipse()
+                self.draw_lines()  # Draw the lines
                 self.fig.canvas.mpl_disconnect(self.fig.canvas.mpl_connect('button_press_event', self.on_press))
                 self.print_ellipse_coordinates()
 
@@ -47,6 +48,21 @@ class EllipseDrawer:
         self.ax.add_patch(self.ellipse)
         plt.draw()
 
+    def draw_lines(self):
+        start_x, start_y = self.points[0]
+        end_x, end_y = self.points[1]
+        center_x = (start_x + end_x) / 2
+        center_y = (start_y + end_y) / 2
+        width = abs(end_x - start_x)
+        height = abs(end_y - start_y)
+
+        self.lines.append(self.ax.axvline(start_x, linestyle='--', color='lightgreen'))
+        self.lines.append(self.ax.axhline(start_y, linestyle='--', color='lightgreen'))
+        self.lines.append(self.ax.axvline(end_x, linestyle='--', color='lightgreen'))
+        self.lines.append(self.ax.axhline(end_y, linestyle='--', color='lightgreen'))
+
+        plt.draw()
+
     def print_ellipse_coordinates(self):
         start_x, start_y = self.points[0]
         end_x, end_y = self.points[1]
@@ -65,6 +81,6 @@ class EllipseDrawer:
     def show(self):
         plt.show()
 
-# Create the ellipse drawer instance and start the plot
+
 drawer = EllipseDrawer()
 drawer.show()

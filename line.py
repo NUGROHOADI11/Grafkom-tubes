@@ -57,6 +57,7 @@ def onclick(event):
         print("Step-by-step Turns:")
         for i, turn in enumerate(turns):
             print(f"Step {i+1}: {turn}")
+            ax.plot(turn[0], turn[1], 'go')
 
     plt.draw()
 
